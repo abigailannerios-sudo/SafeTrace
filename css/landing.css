@@ -1,0 +1,583 @@
+/* ==========================================================================
+   css/landing.css : HOME LANDING PAGE STYLES (index.html)
+   ========================================================================== */
+/* Page canvas: navy background with white text (was the old <body> style) */
+.view-landing {
+  background-color: var(--brand-navy);
+  color: var(--brand-white);
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   STICKY NAVBAR (SCREENSHOT 1)
+   ========================================================================== */
+.landing-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  padding: 0 clamp(20px, 4.5vw, 60px);
+  background: rgba(
+    29,
+    116,
+    179,
+    0.94
+  ); /* Vibrant Blue with high clarity backdrop */
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background 0.3s ease;
+}
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--brand-white);
+  user-select: none;
+}
+.landing-brand-logo {
+  width: 36px;
+  height: 42px;
+  object-fit: contain;
+}
+.landing-brand-name {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.landing-brand-name span {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  margin-left: 4px;
+}
+.landing-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.5vw, 36px);
+  list-style: none;
+}
+.landing-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+.landing-nav-link:hover,
+.landing-nav-link.active {
+  color: var(--brand-white);
+  font-weight: 700;
+}
+.landing-nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--brand-white);
+  border-radius: 999px;
+}
+/* BUTTON: Landing_Donate_Nav_Btn */
+.landing-nav-donate-btn {
+  background: var(--brand-blue);
+  color: var(--brand-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  padding: 9px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+.landing-nav-donate-btn:hover {
+  background: #155e93;
+  border-color: var(--brand-white);
+  transform: translateY(-1.5px);
+}
+
+/* ==========================================================================
+   SECTION ATMOSPHERE & SHARED STYLES
+   ========================================================================== */
+.landing-stage-section {
+  position: relative;
+  min-height: 100vh;
+  padding: 105px clamp(24px, 5vw, 70px) 75px;
+  display: flex;
+  align-items: center;
+  background-image: url("../bg_homepage.png"); /* Picture: User background photo */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+/* Gradient overlay maintaining exact dark navy tone across boards */
+.landing-stage-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 36, 100, 0.88) 0%,
+    rgba(18, 36, 100, 0.82) 50%,
+    rgba(14, 28, 77, 0.94) 100%
+  );
+  z-index: 1;
+}
+.landing-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+/* BUTTON: Reusable Pill Arrow Button (->) */
+.landing-arrow-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1.8px solid rgba(255, 255, 255, 0.65);
+  background: rgba(29, 116, 179, 0.35);
+  color: var(--brand-white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.landing-arrow-pill-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.2s ease;
+}
+.landing-arrow-pill-btn:hover {
+  background: var(--brand-blue);
+  border-color: var(--brand-white);
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   SECTION 1: HERO VIEW (SCREENSHOT 1)
+   ========================================================================== */
+.hero-text-block {
+  max-width: 720px;
+  position: relative;
+  z-index: 3;
+}
+.hero-main-title {
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 22px;
+  color: var(--brand-white);
+}
+.hero-subtext-para {
+  font-size: clamp(13.5px, 1.4vw, 15.5px);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.75;
+  font-weight: 200; /* Subtext: Poppins (Thin) per brandkit */
+  max-width: 590px;
+  margin-bottom: 34px;
+}
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+/* BUTTON: Home_Donate_Btn */
+.hero-donate-action-btn {
+  background: var(--brand-blue);
+  color: var(--brand-white);
+  border: 0;
+  padding: 12px 34px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 18px rgba(29, 116, 179, 0.35);
+}
+.hero-donate-action-btn:hover {
+  background: #155e93;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(29, 116, 179, 0.45);
+}
+/* PICTURE: Right side Classic.png graphic decor */
+.hero-right-shield-decor {
+  position: absolute;
+  right: -22vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(750px, 62vw, 1050px);
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.95;
+}
+
+/* ==========================================================================
+   SECTION 2: SERVICES VIEW (SCREENSHOT 2)
+   ========================================================================== */
+#services.landing-stage-section {
+  scroll-margin-top: 0px;
+  min-height: 100vh;
+  padding-top: 74px !important;
+  padding-bottom: 0 !important;
+  box-sizing: border-box;
+}
+.services-content-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Spacing handled by full viewport min-height */
+}
+
+/* Each service block occupies a full viewport view under the navbar */
+.services-feature-row {
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(30px, 4vw, 60px);
+  align-items: center;
+  padding: 20px 0;
+}
+
+.services-feature-row.reverse-layout {
+  grid-template-columns: 1.15fr 1fr;
+}
+.service-image-rounded-frame {
+  width: 100%;
+  max-width: 440px;
+  height: 380px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #08112c;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0 auto;
+}
+.service-image-rounded-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.service-image-rounded-frame:hover img {
+  transform: scale(1.03);
+}
+.service-details-box h2 {
+  font-size: clamp(34px, 4.2vw, 54px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 18px;
+  color: var(--brand-white);
+}
+.service-details-box p {
+  font-size: 14.5px;
+  font-weight: 200; /* Subtext: Poppins (Thin) */
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  margin-bottom: 26px;
+  max-width: 600px;
+}
+
+/* ==========================================================================
+   SECTION 3: EXECUTIVES VIEW (SCREENSHOT 3)
+   ========================================================================== */
+#directory.landing-stage-section {
+  scroll-margin-top: 0px;
+  min-height: 100vh;
+  padding: 86px clamp(16px, 3vw, 40px) 16px !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.executives-heading-title {
+  font-size: clamp(28px, 4vw, 50px);
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: var(--brand-white);
+}
+
+.exec-carousel-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.exec-carousel-sliding-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+  width: 100%;
+}
+.exec-carousel-group-slide {
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 0;
+}
+.exec-photo-card-frame {
+  width: clamp(230px, 22vw, 300px);
+  height: clamp(280px, 44vh, 370px);
+  border-radius: 24px;
+  overflow: hidden;
+  background: #08112c;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+.exec-photo-card-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Slide 1: Adviser sole card styling */
+.exec-carousel-group-slide.adviser-sole-slide .exec-photo-card-frame {
+  width: clamp(230px, 22vw, 300px);
+  height: clamp(280px, 44vh, 370px);
+}
+
+.exec-carousel-dots-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+/* BUTTONS: Exec_Carousel_Dot1_Btn, Exec_Carousel_Dot2_Btn, Exec_Carousel_Dot3_Btn */
+.exec-pagination-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 0;
+}
+.exec-pagination-dot.active {
+  background: var(--brand-gold); /* Gold active dot indicator */
+  transform: scale(1.3);
+}
+.exec-arrow-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: var(--brand-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.exec-arrow-nav-btn:hover {
+  background: #155d91;
+  transform: scale(1.08);
+}
+/* ==========================================================================
+   SECTION 4: ABOUT US & CONTACT VIEW (SCREENSHOT 4)
+   ========================================================================== */
+#about-us.landing-stage-section {
+  scroll-margin-top: 80px;
+  min-height: calc(100vh - 80px);
+  padding: 24px clamp(20px, 4vw, 60px) 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.vision-mission-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;
+  margin-bottom: 70px;
+}
+.frosted-glass-card {
+  background: var(--glass-surface);
+  border: 1.5px solid var(--glass-stroke);
+  border-radius: 28px;
+  padding: 40px 36px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.frosted-glass-card h3 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+  color: var(--brand-white);
+}
+.frosted-glass-card p {
+  font-size: 15px;
+  font-weight: 200; /* Subtext: Poppins (Thin) */
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 440px;
+}
+.mission-bullet-points-list {
+  list-style: none;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 440px;
+}
+.mission-bullet-points-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14.5px;
+  font-weight: 200; /* Subtext: Poppins (Thin) */
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+.mission-bullet-points-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--brand-white);
+  font-size: 20px;
+  line-height: 1;
+}
+/* Contact Us Row */
+.contact-us-row-block {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  text-align: center;
+  padding-top: clamp(80px, 12vh, 120px);
+  padding-bottom: 80px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.contact-us-main-heading {
+  font-size: clamp(34px, 4.5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--brand-white);
+}
+.contact-links-vertical-stack {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(20px, 3.5vw, 48px);
+}
+/* BUTTONS / ANCHORS: Contact_Facebook_Btn, Contact_Instagram_Btn, Contact_Email_Btn */
+.contact-channel-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  color: var(--brand-white);
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  width: fit-content;
+}
+.contact-channel-item-link:hover {
+  color: var(--brand-cyan);
+  transform: translateX(6px);
+}
+.contact-icon-square-box {
+  width: 52px;
+  height: 52px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+.contact-channel-item-link:hover .contact-icon-square-box {
+  border-color: var(--brand-cyan);
+  background: rgba(160, 215, 231, 0.15);
+}
+.contact-icon-square-box svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+/* Footer Tag */
+.landing-bottom-footer-bar {
+  margin-top: 50px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 11.5px;
+  color: #8c9fb8;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+@media (max-width: 980px) {
+  .hero-right-shield-decor {
+    display: none;
+  }
+  .services-feature-row,
+  .services-feature-row.reverse-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .vision-mission-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-us-row-block {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .exec-carousel-group-slide {
+    gap: 14px;
+  }
+  .exec-photo-card-frame {
+    width: 45%;
+    height: 380px;
+  }
+  .landing-nav-menu {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   SCROLL MARGINS: keeps #directory and #about-us clear of the fixed 76px navbar
+   when reached from the navbar links / arrow buttons
+   ========================================================================== */
+#directory,
+#about-us {
+  scroll-margin-top: 80px;
+}
