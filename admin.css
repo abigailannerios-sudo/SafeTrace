@@ -1,7 +1,4 @@
-/* ==========================================================================
-   css/admin.css : ADMIN WORKSPACE (admin.html) STYLES
-   ========================================================================== */
-/* Page canvas: light background with navy text (was the old <body> style) */
+
 .view-admin {
   background-color: var(--surface-page);
   color: var(--text-main);
@@ -12,9 +9,7 @@
   line-height: 1.5;
 }
 
-/* ==========================================================================
-   TOP NAVIGATION BAR
-   ========================================================================== */
+/*tp nav bar */
 .admin-topbar {
   height: 74px;
   padding: 0 clamp(20px, 4vw, 50px);
@@ -56,9 +51,7 @@
   gap: 14px;
 }
 
-/* ==========================================================================
-   VIEW 1: ADMIN AUTHENTICATION SCREEN (SIGN IN / SIGN UP / FORGOT PASSWORD)
-   ========================================================================== */
+/*admin sign in/out screen*/
 .admin-auth-screen {
   flex: 1;
   display: flex;
