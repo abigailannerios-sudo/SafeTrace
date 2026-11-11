@@ -1,8 +1,13 @@
+<<<<<<< HEAD:donor.css
 /* ==========================================================================
    css/donor.css : DONOR TRANSPARENCY PORTAL (donor.html) STYLES
    ========================================================================== */
 /* Page canvas: light background with navy text (was the old <body> style) */
 .view-donor {
+=======
+
+.view-admin {
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   background-color: var(--surface-page);
   color: var(--text-main);
   font-family: 'Poppins', sans-serif;
@@ -12,10 +17,16 @@
   line-height: 1.5;
 }
 
+<<<<<<< HEAD:donor.css
 /* ==========================================================================
    TOP NAVIGATION BAR
    ========================================================================== */
 .donor-topbar {
+=======
+/*top navigation*/
+
+.admin-topbar {
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   height: 74px;
   padding: 0 clamp(20px, 4vw, 50px);
   background: var(--brand-white);
@@ -56,10 +67,15 @@
   gap: 14px;
 }
 
+<<<<<<< HEAD:donor.css
 /* ==========================================================================
    VIEW 1: DONOR WELCOME SCREEN 
    ========================================================================== */
 .donor-welcome-screen {
+=======
+/*admin authentication*/
+.admin-auth-screen {
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -94,18 +110,61 @@
   margin-bottom: 12px;
   line-height: 1.1;
 }
+<<<<<<< HEAD:donor.css
 .donor-welcome-motto {
   font-size: clamp(15px, 2vw, 19px);
   font-weight: 300; /* Subtext: Poppins Thin/Light */
   font-style: italic;
+=======
+.auth-subtext {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+.auth-toggle-tabs {
+  display: flex;
+  background: #F1F5F9;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+  gap: 4px;
+}
+/*sign in/out buttons*/
+.auth-tab-btn {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.auth-tab-btn.active {
+  background: var(--brand-white);
+  color: var(--brand-navy);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.email-hint-tag {
+  font-size: 11px;
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   color: var(--brand-blue);
   margin-bottom: 34px;
 }
+<<<<<<< HEAD:donor.css
 /* BUTTON: Donor_Welcome_Continue_Btn */
 .btn-donor-continue {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+=======
+/*admin auth submit button*/
+.btn-auth-submit {
+  width: 100%;
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   background: var(--brand-blue);
   color: var(--brand-white);
   border: 0;
@@ -123,6 +182,7 @@
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(29, 116, 179, 0.45);
 }
+<<<<<<< HEAD:donor.css
 /* SECRET ADMIN 3-CLICK FOOTER PHRASE */
 .donor-secret-footer {
   margin-top: 50px;
@@ -135,6 +195,13 @@
 .secret-admin-trigger-phrase {
   display: inline-block;
   color: #94A3B8;
+=======
+/*forgot pass*/
+.btn-forgot-password {
+  background: transparent;
+  border: 0;
+  color: var(--brand-blue);
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   font-size: 12px;
   font-weight: 400;
   cursor: pointer;
@@ -145,10 +212,15 @@
   color: var(--brand-blue);
 }
 
+<<<<<<< HEAD:donor.css
 /* ==========================================================================
    VIEW 2: PUBLIC TRANSPARENCY WORKSPACE
    ========================================================================== */
 .donor-workspace {
+=======
+/*admin dashboard*/
+.admin-workspace-layout {
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   flex: 1;
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -170,8 +242,13 @@
   color: #94A3B8;
   padding: 6px 12px;
 }
+<<<<<<< HEAD:donor.css
 /* BUTTONS: Donor_Nav_Public_Btn, Donor_Nav_Track_Btn, Donor_Nav_Dist_Btn, Donor_Nav_Stock_Btn */
 .donor-nav-tab-btn {
+=======
+/*admin nav dashboard buttons*/
+.admin-nav-tab-btn {
+>>>>>>> d8e12f5 (feat(styles): add admin dashboard styles):css/admin.css
   display: flex;
   align-items: center;
   gap: 12px;
