@@ -12,7 +12,7 @@
 }
 
 /* ==========================================================================
-   STICKY NAVBAR (SCREENSHOT 1)
+   STICKY NAVBAR
    ========================================================================== */
 .landing-navbar {
   position: fixed;
@@ -171,7 +171,7 @@
 }
 
 /* ==========================================================================
-   SECTION 1: HERO VIEW (SCREENSHOT 1)
+   SECTION 1: HERO VIEW
    ========================================================================== */
 .hero-text-block {
   max-width: 720px;
@@ -233,7 +233,7 @@
 }
 
 /* ==========================================================================
-   SECTION 2: SERVICES VIEW (SCREENSHOT 2)
+   SECTION 2: SERVICES VIEW 
    ========================================================================== */
 #services.landing-stage-section {
   scroll-margin-top: 0px;
@@ -301,7 +301,7 @@
 }
 
 /* ==========================================================================
-   SECTION 3: EXECUTIVES VIEW (SCREENSHOT 3)
+   SECTION 3: EXECUTIVES VIEW 
    ========================================================================== */
 #directory.landing-stage-section {
   scroll-margin-top: 0px;
@@ -402,7 +402,7 @@
   transform: scale(1.08);
 }
 /* ==========================================================================
-   SECTION 4: ABOUT US & CONTACT VIEW (SCREENSHOT 4)
+   SECTION 4: ABOUT US & CONTACT VIEW 
    ========================================================================== */
 #about-us.landing-stage-section {
   scroll-margin-top: 80px;
