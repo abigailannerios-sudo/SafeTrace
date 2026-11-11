@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeStay Connect | Donor Transparency Portal</title>
+  <!-- Google Fonts: Poppins (Official Brand Font: Intro Headlines + Thin Subtext) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300&display=swap" rel="stylesheet" />
+  
+  <!-- STYLESHEET: Shared brandkit: variables, resets, modals, badges -->
+  <link rel="stylesheet" href="css/brand.css" />
+  <!-- STYLESHEET: Donor portal layout & components -->
+  <link rel="stylesheet" href="css/donor.css" />
+</head>
+<body class="view-donor">
+
+  <!-- ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== -->
+  <header class="donor-topbar">
+    <a href="#" class="donor-brand-link" onclick="handleLogoReturnHome()">
+      <!-- PICTURE: 'Classic.png' brand emblem in top bar -->
+      <img src="Classic.png" alt="SafeStay Emblem" class="donor-brand-logo" />
+      <div class="donor-brand-title">SafeStay <span>Connect</span></div>
+    </a>
+
+    <div class="donor-topbar-actions">
+      <!-- BUTTON: Donor_Home_Return_Btn (Returns to Landing Page Screen) -->
+      <button type="button" id="Donor_Home_Return_Btn" class="btn-return-home" onclick="handleLogoReturnHome()">
+        ← Return Home
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       VIEW 1: DONOR WELCOME SCREEN
+       ========================================================================== -->
+  <section id="donorWelcomeScreen" class="donor-welcome-screen">
+    <!-- PICTURE: 'Classic.png' large decorative shield crest -->
+    <div class="donor-welcome-crest-wrap">
+      <img src="Classic.png" alt="SafeStay Crest Logo" />
+    </div>
+
+    <!-- Official Title -->
+    <h1 class="donor-welcome-heading">Welcome to SafeTrace</h1>
+    <p class="donor-welcome-motto">"Where safety and support meet for student boarders."</p>
+
+    <!-- BUTTON: Donor_Welcome_Continue_Btn (Enters the Public Transparency Portal) -->
+    <button type="button" id="Donor_Welcome_Continue_Btn" class="btn-donor-continue" onclick="enterPublicTransparency()">
+      SafeStay Connect →
+    </button>
+
+    <!-- SECRET ADMIN 3-CLICK TRIGGER FOOTER -->
+    <footer class="donor-secret-footer">
+      <!-- BUTTON / TRIGGER: Donor_Secret_Admin_Trigger_Btn (Click 3 times to open Admin Sign In) -->
+      <span id="Donor_Secret_Admin_Trigger_Btn" class="secret-admin-trigger-phrase" onclick="handleSecretAdminClick()">
+        SafeTrace: Web-Based Donation Inventory and Tracking Management System
+      </span>
+    </footer>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 2: PUBLIC TRANSPARENCY WORKSPACE
+       ========================================================================== -->
+  <section id="donorTransparencyWorkspace" class="donor-workspace hidden">
+    
+    <!-- Left Navigation Sidebar -->
+    <aside class="donor-sidebar">
+      <div class="donor-sidebar-label">Public Access</div>
+      
+      <!-- BUTTON: Donor_Nav_Public_Btn -->
+      <button type="button" id="Donor_Nav_Public_Btn" class="donor-nav-tab-btn active" onclick="switchDonorTab('overview')">
+        🏛️ Public Portal
+      </button>
+
+      <!-- BUTTON: Donor_Nav_Track_Btn -->
+      <button type="button" id="Donor_Nav_Track_Btn" class="donor-nav-tab-btn" onclick="switchDonorTab('track')">
+        🔍 Track Reference Code
+      </button>
+
+      <!-- BUTTON: Donor_Nav_Dist_Btn -->
+      <button type="button" id="Donor_Nav_Dist_Btn" class="donor-nav-tab-btn" onclick="switchDonorTab('distributions')">
+        🚚 Distribution Logs
+      </button>
+
+      <!-- BUTTON: Donor_Nav_Stock_Btn -->
+      <button type="button" id="Donor_Nav_Stock_Btn" class="donor-nav-tab-btn" onclick="switchDonorTab('inventory')">
+        📦 Supply Availability
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="donor-main-container">
+      
+      <!-- Tab 1: Public Portal Overview -->
+      <div id="donorTabOverview">
+        <div class="donor-page-heading">
+          <div>
+            <h1>Public Donation Transparency</h1>
+            <p>Verified relief operations, public supply counts, and community distributions.</p>
+          </div>
+          <!-- BUTTON: Donor_Choose_Donate_Btn (Opens Choice Modal) -->
+          <button type="button" id="Donor_Choose_Donate_Btn" class="btn-donor-main-action" onclick="openChoiceModal()">
+            🎁 Donate Supplies / Funds
+          </button>
+        </div>
+
+        <!-- Dynamic / Updatable Active Community Drive Banner Card -->
+        <div class="active-campaign-banner-card">
+          <div class="campaign-banner-img-wrap">
+            <!-- PICTURE: Active drive banner (Default: bg_homepage.jpg, updateable by admin) -->
+            <img id="publicDriveImage" src="bg_homepage.jpg" alt="Active Community Relief Campaign" />
+            <div class="campaign-banner-overlay-badge">Active Community Relief Drive</div>
+          </div>
+          <div class="campaign-banner-info-body">
+            <h2 id="publicDriveTitle">Bagyong Paeng Student Boarder Relief Drive</h2>
+            <p id="publicDriveDescription">
+              Coordinating emergency sustenance, bedding packs, and hygiene support directly for affected university student boarders and community evacuation facilities across Iligan City.
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Summary Table of Core Stocks (Numbers Only per Request) -->
+        <div class="donor-card">
+          <div class="donor-card-header">
+            <h3>Essential Relief Supply Reserves (Live Counts)</h3>
+          </div>
+          <div class="donor-card-body">
+            <div class="table-container">
+              <table class="donor-data-table">
+                <thead>
+                  <tr>
+                    <th>Relief Item</th>
+                    <th>Category</th>
+                    <th>Available Quantity (In Stock)</th>
+                  </tr>
+                </thead>
+                <tbody id="publicSummaryStockTable">
+                  <!-- Dynamically populated from localStorage -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Track Donation by Reference Code -->
+      <div id="donorTabTrack" class="hidden">
+        <div class="donor-page-heading">
+          <div>
+            <h1>Track Donation Reference</h1>
+            <p>Enter your tracking receipt code (e.g., ST-1048) to review pledge delivery and intake status.</p>
+          </div>
+        </div>
+
+        <div class="donor-card">
+          <div class="donor-card-body">
+            <div style="display:flex; gap:12px; max-width:540px; margin-bottom:14px;">
+              <input type="text" id="donorTrackInput" placeholder="Enter Reference Code (e.g., ST-1048)" style="flex:1; border:1.5px solid var(--surface-border); border-radius:10px; padding:10px 14px; font-family:inherit; font-size:13px;" />
+              <!-- BUTTON: Donor_Track_Search_Btn -->
+              <button type="button" id="Donor_Track_Search_Btn" class="btn-search-reference" onclick="handleSearchReference()">
+                Search Record
+              </button>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); font-weight:300;">
+              Donor personal identities and contact numbers remain completely redacted for privacy.
+            </p>
+          </div>
+        </div>
+
+        <!-- Search Result Box -->
+        <div id="donorTrackResultBox"></div>
+      </div>
+
+      <!-- Tab 3: Distribution Logs -->
+      <div id="donorTabDistributions" class="hidden">
+        <div class="donor-page-heading">
+          <div>
+            <h1>Community Distribution Logs</h1>
+            <p>Verified historical log of supplies dispatched to student boarding houses and relief centers.</p>
+          </div>
+        </div>
+
+        <div class="donor-card">
+          <div class="table-container">
+            <table class="donor-data-table">
+              <thead>
+                <tr>
+                  <th>Dispatch ID</th>
+                  <th>Relief Supply</th>
+                  <th>Quantity Distributed</th>
+                  <th>Beneficiary Initiative</th>
+                  <th>Date Logged</th>
+                </tr>
+              </thead>
+              <tbody id="publicDistributionsTable">
+                <!-- Dynamically populated from localStorage -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Full Supply Availability (Exact Numbers) -->
+      <div id="donorTabInventory" class="hidden">
+        <div class="donor-page-heading">
+          <div>
+            <h1>Supply Availability</h1>
+            <p>Transparent numerical overview of all warehouse commodities currently tracked by SafeStay.</p>
+          </div>
+        </div>
+
+        <div class="donor-card">
+          <div class="table-container">
+            <table class="donor-data-table">
+              <thead>
+                <tr>
+                  <th>Item Description</th>
+                  <th>Category</th>
+                  <th>Units In Stock</th>
+                  <th>Unit Type</th>
+                </tr>
+              </thead>
+              <tbody id="publicFullInventoryTable">
+                <!-- Dynamically populated from localStorage -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <!-- ==========================================================================
+       MODAL 1: CHOOSE DONATION TYPE (ITEMS VS MONEY)
+       ========================================================================== -->
+  <div id="donorChoiceModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Choose How You Wish to Donate</h3>
+        <!-- BUTTON: Donor_Modal_Close_Choice_Btn -->
+        <button type="button" id="Donor_Modal_Close_Choice_Btn" class="modal-close-icon-btn" onclick="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="choice-grid">
+          
+          <!-- BUTTON: Donor_Select_Items_Btn (Opens Goods Pledge Modal) -->
+          <button type="button" id="Donor_Select_Items_Btn" class="choice-selection-btn" onclick="openGoodsPledgeModal()">
+            <div class="choice-icon-wrap">📦</div>
+            <strong>Donate Goods</strong>
+            <span>Canned food, hygiene kits, bedding & water</span>
+          </button>
+
+          <!-- BUTTON: Donor_Select_Money_Btn (Opens GCash / Bank QR Modal) -->
+          <button type="button" id="Donor_Select_Money_Btn" class="choice-selection-btn" onclick="openMoneyDonationModal()">
+            <div class="choice-icon-wrap">💳</div>
+            <strong>Donate Money</strong>
+            <span>Instant GCash or Bank Transfer QR</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: DONATE GOODS / SUPPLIES PLEDGE FORM
+       ========================================================================== -->
+  <div id="donorGoodsModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Pledge Relief Goods & Supplies</h3>
+        <!-- BUTTON: Donor_Modal_Close_Goods_Btn -->
+        <button type="button" id="Donor_Modal_Close_Goods_Btn" class="modal-close-icon-btn" onclick="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="donorGoodsForm" onsubmit="handleGoodsPledgeSubmit(event)">
+          
+          <div class="form-group">
+            <label for="donorNameInput">Name / Organization (Optional)</label>
+            <input type="text" id="donorNameInput" placeholder="Leave empty for Anonymous" />
+          </div>
+
+          <div class="form-group">
+            <label for="donorItemInput">Item / Goods Description *</label>
+            <input type="text" id="donorItemInput" list="inventoryItemList" placeholder="e.g., Canned goods, Blankets, Soap" required />
+            <datalist id="inventoryItemList"></datalist>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label for="donorQuantityInput">Quantity *</label>
+              <input type="number" id="donorQuantityInput" min="1" step="1" placeholder="10" required />
+            </div>
+            <div class="form-group">
+              <label for="donorUnitInput">Packaging Unit</label>
+              <input type="text" id="donorUnitInput" placeholder="cans, packs, pcs" value="units" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="donorDropOffSelect">Target Drop-Off Hub *</label>
+            <select id="donorDropOffSelect" required>
+              <option value="MISSC Storage Hub (MSU-IIT Main)">MISSC Storage Hub (MSU-IIT Main)</option>
+              <option value="Student Center Assistance Desk">Student Center Assistance Desk</option>
+              <option value="Gymnasium Calamity Hub">Gymnasium Calamity Hub</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="donorNotesInput">Notes / Expiration (Optional)</label>
+            <textarea id="donorNotesInput" rows="2" placeholder="e.g., Expiry 2027, packed in 2 boxes"></textarea>
+          </div>
+
+          <p style="font-size:11.5px; color:var(--text-muted); margin-bottom:18px;">
+            Pledged items enter the registry with status <span class="badge-pill badge-to-receive">● To Receive</span>. Quantities will be credited to live inventory once physically confirmed by admins.
+          </p>
+
+          <!-- BUTTON: Donor_Pledge_Submit_Btn -->
+          <button type="submit" id="Donor_Pledge_Submit_Btn" class="btn-donor-main-action" style="width:100%;">
+            Confirm Pledge & Generate Reference Code
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: PLEDGE CONFIRMATION (DISPLAYS GENERATED ST-XXXX CODE)
+       ========================================================================== -->
+  <div id="donorReceiptModal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:center;">
+      <div class="modal-body" style="padding:32px 24px;">
+        <div style="width:54px; height:54px; border-radius:50%; background:var(--status-green-bg); color:var(--status-green); font-size:24px; display:grid; place-items:center; margin:0 auto 16px;">
+          ✓
+        </div>
+        <h3 style="font-size:20px; color:var(--brand-navy); margin-bottom:8px;">Pledge Recorded Successfully!</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px;">
+          Keep your official tracking reference code to check intake updates:
+        </p>
+
+        <div id="generatedReceiptCodeBox" style="font-size:26px; font-weight:800; letter-spacing:2px; color:var(--brand-navy); background:#F1F6FB; border:2px dashed var(--brand-blue); border-radius:12px; padding:12px 24px; display:inline-block; margin-bottom:20px;">
+          ST-1049
+        </div>
+
+        <div id="generatedReceiptSummaryText" style="font-size:13px; color:#334155; line-height:1.7; margin-bottom:24px;"></div>
+
+        <!-- BUTTON: Donor_Receipt_Done_Btn -->
+        <button type="button" id="Donor_Receipt_Done_Btn" class="btn-donor-main-action" onclick="closeModals()">
+          Done & View Tracker
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: DONATE MONEY (GCASH & BANK QR CODES WITH ZOOM)
+       ========================================================================== -->
+  <div id="donorMoneyModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Donate via GCash or Bank Transfer</h3>
+        <!-- BUTTON: Donor_Modal_Close_Money_Btn -->
+        <button type="button" id="Donor_Modal_Close_Money_Btn" class="modal-close-icon-btn" onclick="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px;">
+          Scan either QR code using your banking or GCash app. <strong>Click any QR code to zoom in</strong> for easy scanning.
+        </p>
+
+        <div class="qr-cards-row">
+          
+          <!-- GCash QR Box -->
+          <!-- BUTTON / TRIGGER: Donor_QR_GCash_Zoom_Btn -->
+          <div class="qr-box" id="Donor_QR_GCash_Zoom_Btn" onclick="zoomQRCode('GCash', '0917-555-MISSC', 'SafeStay Welfare Relief')">
+            <strong>GCash QR</strong>
+            <div class="qr-svg-holder">
+              <!-- High-contrast crisp SVG QR Code -->
+              <svg viewBox="0 0 100 100" fill="#122464" width="100%" height="100%">
+                <rect width="100" height="100" fill="#FFFFFF"/>
+                <path d="M10 10h30v30h-30zM15 15h20v20h-20zM20 20h10v10h-10z"/>
+                <path d="M60 10h30v30h-30zM65 15h20v20h-20zM70 20h10v10h-10z"/>
+                <path d="M10 60h30v30h-30zM15 65h20v20h-20zM20 70h10v10h-10z"/>
+                <rect x="45" y="15" width="8" height="8"/>
+                <rect x="45" y="30" width="8" height="8"/>
+                <rect x="15" y="45" width="8" height="8"/>
+                <rect x="30" y="45" width="8" height="8"/>
+                <rect x="45" y="45" width="10" height="10" fill="#1D74B3"/>
+                <rect x="60" y="45" width="8" height="8"/>
+                <rect x="75" y="45" width="8" height="8"/>
+                <rect x="45" y="60" width="8" height="8"/>
+                <rect x="60" y="60" width="12" height="8"/>
+                <rect x="75" y="75" width="15" height="15"/>
+              </svg>
+            </div>
+            <span class="qr-zoom-hint">🔍 Click to Zoom</span>
+            <div style="font-size:11.5px; color:#475569; margin-top:6px;">Acc: 0917-555-MISSC</div>
+          </div>
+
+          <!-- Bank QR Box -->
+          <!-- BUTTON / TRIGGER: Donor_QR_Bank_Zoom_Btn -->
+          <div class="qr-box" id="Donor_QR_Bank_Zoom_Btn" onclick="zoomQRCode('Landbank', 'XXXX-XXXX-XX', 'MSU-IIT SafeStay Fund')">
+            <strong>Landbank Transfer</strong>
+            <div class="qr-svg-holder">
+              <!-- High-contrast crisp SVG QR Code -->
+              <svg viewBox="0 0 100 100" fill="#122464" width="100%" height="100%">
+                <rect width="100" height="100" fill="#FFFFFF"/>
+                <path d="M10 10h30v30h-30zM15 15h20v20h-20zM20 20h10v10h-10z"/>
+                <path d="M60 10h30v30h-30zM65 15h20v20h-20zM70 20h10v10h-10z"/>
+                <path d="M10 60h30v30h-30zM15 65h20v20h-20zM20 70h10v10h-10z"/>
+                <rect x="45" y="12" width="6" height="12"/>
+                <rect x="52" y="25" width="6" height="15"/>
+                <rect x="12" y="48" width="10" height="6"/>
+                <rect x="25" y="52" width="15" height="6"/>
+                <rect x="45" y="45" width="10" height="10" fill="#1D74B3"/>
+                <rect x="62" y="48" width="12" height="6"/>
+                <rect x="78" y="48" width="10" height="6"/>
+                <rect x="48" y="65" width="15" height="8"/>
+                <rect x="68" y="62" width="12" height="15"/>
+                <rect x="82" y="80" width="8" height="8"/>
+              </svg>
+            </div>
+            <span class="qr-zoom-hint">🔍 Click to Zoom</span>
+            <div style="font-size:11.5px; color:#475569; margin-top:6px;">Acc: XXXX-XXXX-XX</div>
+          </div>
+
+        </div>
+
+        <p style="font-size:11.5px; color:#64748B; text-align:center;">
+          Official Student Relief Account · Authorized by MSU-IIT Community Services
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: QR ZOOM LIGHTBOX
+       ========================================================================== -->
+  <div id="donorQRZoomModal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width:380px;">
+      <div class="modal-header">
+        <h3 id="qrZoomTitle">Enlarged QR Code</h3>
+        <button type="button" class="modal-close-icon-btn" onclick="closeQRZoom()">×</button>
+      </div>
+      <div class="modal-body qr-lightbox-content">
+        <div id="qrZoomSvgContainer"></div>
+        <h4 id="qrZoomAccountName" style="color:var(--brand-navy); font-size:16px; margin-bottom:4px;"></h4>
+        <p id="qrZoomAccountNumber" style="color:var(--brand-blue); font-weight:700; font-size:14px;"></p>
+        <p style="font-size:11px; color:#64748B; margin-top:8px;">Ready for phone camera & banking app scanning</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT: DATA LOGIC, STORAGE & FLOW HANDLERS
+       ========================================================================== -->
+  <!-- SCRIPT: Shared state & localStorage (must load first) -->
+  <script src="js/data.js"></script>
+  <!-- SCRIPT: Donor portal logic -->
+  <script src="js/donor.js"></script>
+</body>
+</html>
