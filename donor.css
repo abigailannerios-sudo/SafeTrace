@@ -1,6 +1,4 @@
-/* ==========================================================================
-   css/donor.css : DONOR TRANSPARENCY PORTAL (donor.html) STYLES
-   ========================================================================== */
+/* DONOR TRANSPARENCY PORTAL*/
 /* Page canvas: light background with navy text (was the old <body> style) */
 .view-donor {
   background-color: var(--surface-page);
@@ -12,9 +10,7 @@
   line-height: 1.5;
 }
 
-/* ==========================================================================
-   TOP NAVIGATION BAR
-   ========================================================================== */
+/* TOP NAVIGATION BAR */
 .donor-topbar {
   height: 74px;
   padding: 0 clamp(20px, 4vw, 50px);
@@ -56,9 +52,7 @@
   gap: 14px;
 }
 
-/* ==========================================================================
-   VIEW 1: DONOR WELCOME SCREEN (Matches Screenshot 2026-11-02 104341.png)
-   ========================================================================== */
+/* VIEW 1: DONOR WELCOME SCREEN */
 .donor-welcome-screen {
   flex: 1;
   display: flex;
@@ -145,9 +139,7 @@
   color: var(--brand-blue);
 }
 
-/* ==========================================================================
-   VIEW 2: PUBLIC TRANSPARENCY WORKSPACE
-   ========================================================================== */
+/* VIEW 2: PUBLIC TRANSPARENCY WORKSPACE */
 .donor-workspace {
   flex: 1;
   display: grid;
@@ -355,9 +347,7 @@
   background: #155e93;
 }
 
-/* ==========================================================================
-   MODAL DIALOGS
-   ========================================================================== */
+/* MODAL DIALOGS */
 /* BUTTON: Donor_Modal_Close_Btn */
 .modal-close-icon-btn {
   background: #F1F5F9;
