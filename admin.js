@@ -1,7 +1,5 @@
-// ==========================================================================
-// js/admin.js : ADMIN WORKSPACE LOGIC (needs js/data.js loaded first)
-// ==========================================================================
-// Logo / Return Home buttons go back to the Landing Page (index.html)
+// ADMIN WORKSPACE LOGIC 
+// Logo / Return Home buttons go back to the Landing Page 
 function handleLogoReturnHome() {
   window.location.href = 'index.html';
 }
