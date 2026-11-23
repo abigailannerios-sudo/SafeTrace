@@ -7,27 +7,27 @@
   --brand-navy: #122464;
 
   /* COLOR 2: Vibrant Blue (#1D74B3) - Primary actions, active highlights & banners */
-  --brand-blue: #1D74B3;
+  --brand-blue: #1d74b3;
 
   /* COLOR 3: Pure White (#FFFFFF) - Cards, typography & surfaces */
-  --brand-white: #FFFFFF;
+  --brand-white: #ffffff;
 
   /* COLOR 4: Cyan Accent (#A0D7E7) - Subtle borders, highlights & active pills */
-  --brand-cyan: #A0D7E7;
+  --brand-cyan: #a0d7e7;
 
   /* COLOR 5: Gold (#D98E16) - "To Receive" pending badges & warning alerts */
-  --brand-gold: #D98E16;
+  --brand-gold: #d98e16;
 
   /* Neutral UI & Status Colors */
-  --surface-page: #F4F7FB;
-  --surface-border: #E1E8F2;
+  --surface-page: #f4f7fb;
+  --surface-border: #e1e8f2;
   --text-main: #122464;
-  --text-muted: #64748B;
-  --status-green: #1B8A5A;
-  --status-green-bg: #EEFAF3;
-  --status-gold-bg: #FEF6E9;
-  --status-red: #C53B3B;
-  --status-red-bg: #FDF2F2;
+  --text-muted: #64748b;
+  --status-green: #1b8a5a;
+  --status-green-bg: #eefaf3;
+  --status-gold-bg: #fef6e9;
+  --status-red: #c53b3b;
+  --status-red-bg: #fdf2f2;
   /* Translucent glass fills for frosted panels (used by the landing page) */
   --glass-surface: rgba(18, 36, 100, 0.58);
   --glass-stroke: rgba(255, 255, 255, 0.18);
@@ -47,7 +47,7 @@ html {
 
 /* Page base: each page paints its own background in its own stylesheet */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   line-height: 1.5;
 }
 
@@ -85,7 +85,6 @@ body {
   color: var(--brand-white);
   transform: translateY(-1.5px);
 }
-
 
 /* ==========================================================================
    VIEW 2: PUBLIC TRANSPARENCY WORKSPACE
@@ -153,7 +152,6 @@ body {
   outline: none;
   box-shadow: 0 0 0 3px rgba(29, 116, 179, 0.15);
 }
-
 
 /* ==========================================================================
    MODAL DIALOGS
