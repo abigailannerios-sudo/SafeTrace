@@ -1,19 +1,31 @@
 // ==========================================================================
-// js/donor.js : DONOR TRANSPARENCY PORTAL LOGIC (needs js/data.js loaded first)
+// js/donor.js : DONOR / STUDENT PORTAL LOGIC (index.html)
+// Requires js/data.js loaded first.
 // ==========================================================================
-// Logo / Return Home buttons go back to the Landing Page (index.html)
-function handleLogoReturnHome() {
-  window.location.href = 'index.html';
+function escapeDonorHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[ch]);
 }
 
-// 1. Navigation: Enter Public Transparency Portal
+// 1. Navigation between Welcome Page & Public Portal
 function enterPublicTransparency() {
   document.getElementById('donorWelcomeScreen').classList.add('hidden');
   document.getElementById('donorTransparencyWorkspace').classList.remove('hidden');
-  renderDonorTables();
+  renderDonorPortal();
 }
 
-// 2. Secret 3-Click Admin Trigger
+function returnToWelcomeScreen(event) {
+  if (event) event.preventDefault();
+  document.getElementById('donorTransparencyWorkspace').classList.add('hidden');
+  document.getElementById('donorWelcomeScreen').classList.remove('hidden');
+}
+
+// 2. Secret 3-Click Admin Portal Trigger
 let secretClickCount = 0;
 let secretClickTimer = null;
 
@@ -24,11 +36,11 @@ function handleSecretAdminClick() {
 
   if (secretClickCount >= 3) {
     secretClickCount = 0;
-    window.location.href = 'admin.html'; // Opens the Admin Sign-In Screen (admin.html)
+    window.location.href = 'admin.html';
   }
 }
 
-// 4. Tab Switching inside Transparency Portal
+// 3. Sidebar Tab Switching
 function switchDonorTab(tabName) {
   const tabs = ['overview', 'track', 'distributions', 'inventory'];
   tabs.forEach(t => {
@@ -36,70 +48,170 @@ function switchDonorTab(tabName) {
     if (el) el.classList.toggle('hidden', t !== tabName);
   });
 
-  const buttons = [
+  const navButtons = [
     { name: 'overview', id: 'Donor_Nav_Public_Btn' },
     { name: 'track', id: 'Donor_Nav_Track_Btn' },
     { name: 'distributions', id: 'Donor_Nav_Dist_Btn' },
     { name: 'inventory', id: 'Donor_Nav_Stock_Btn' }
   ];
 
-  buttons.forEach(b => {
+  navButtons.forEach(b => {
     const btn = document.getElementById(b.id);
     if (btn) btn.classList.toggle('active', b.name === tabName);
   });
 }
 
-// 5. Render Live Tables with Numerical In-Stock Quantities
-function renderDonorTables() {
-  appData = loadAppData();
+// 4. Render Public Portal (Drives, Supply Overview, Inventory & Distributions)
+async function renderDonorPortal() {
+  appData = await fetchAppDataAsync();
 
-  // Render Active Campaign Banner
-  document.getElementById('publicDriveTitle').textContent = appData.activeDrive.title;
-  document.getElementById('publicDriveDescription').textContent = appData.activeDrive.description;
-  if (appData.activeDrive.image) {
-    document.getElementById('publicDriveImage').src = appData.activeDrive.image;
+  const drive = appData.activeDrive || defaultData.activeDrive;
+  const inventoryList = Array.isArray(appData.inventory) ? appData.inventory : [];
+  const distributionsList = Array.isArray(appData.distributions) ? appData.distributions : [];
+
+  // Active / Upcoming Drive Banner
+  document.getElementById('publicDriveTitle').textContent = drive.title;
+  document.getElementById('publicDriveDescription').textContent = drive.description;
+  document.getElementById('publicDriveStatusBadge').textContent =
+    drive.status === 'Upcoming' ? 'Upcoming Drive' : 'Current Drive';
+  renderDriveCarousel(drive);
+
+  // Datalist suggestions for Goods Pledge modal
+  const dataList = document.getElementById('inventoryItemList');
+  if (dataList) {
+    dataList.innerHTML = inventoryList.map(i => `<option value="${escapeDonorHtml(i.name)}">`).join('');
   }
 
-  // Populate Datalist for pledge form
-  const dataList = document.getElementById('inventoryItemList');
-  dataList.innerHTML = appData.inventory.map(i => `<option value="${i.item}">`).join('');
+  // Live General Supply Overview Progress Bars
+  const supplyBarsEl = document.getElementById('publicSupplyOverviewBars');
+  const maxQty = Math.max(1, ...inventoryList.map(i => Number(i.quantity) || 0));
+  if (inventoryList.length === 0) {
+    supplyBarsEl.innerHTML = '<div style="font-size:13px; color:#64748b; text-align:center;">No relief supplies tracked yet.</div>';
+  } else {
+    supplyBarsEl.innerHTML = inventoryList.map(i => {
+      const qty = Math.max(0, Number(i.quantity) || 0);
+      const pct = qty === 0 ? 4 : Math.max(10, Math.min(100, Math.round((qty / maxQty) * 100)));
+      return `
+        <div class="supply-progress-row">
+          <div class="supply-progress-header">
+            <span class="supply-progress-label">${escapeDonorHtml(i.name)}</span>
+            <span class="supply-progress-count">${qty} ${escapeDonorHtml(i.unit || 'pcs')}</span>
+          </div>
+          <div class="supply-progress-track">
+            <div class="supply-progress-fill" style="width: ${pct}%;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-  // Summary Stock Table (Numerical Only)
-  const summaryTbody = document.getElementById('publicSummaryStockTable');
-  summaryTbody.innerHTML = appData.inventory.map(i => `
+  // Public Supply Availability Table
+  document.getElementById('publicFullInventoryTable').innerHTML = inventoryList.map(i => `
     <tr>
-      <td><strong>${i.item}</strong></td>
-      <td style="color:#64748B;">${i.category}</td>
-      <td><span class="badge-number-stock">${i.quantity} ${i.unit}</span></td>
+      <td><strong>${escapeDonorHtml(i.name)}</strong></td>
+      <td style="color:#64748B;">${escapeDonorHtml(i.category || 'General Relief')}</td>
+      <td><span class="badge-number-stock">${Number(i.quantity) || 0}</span></td>
+      <td>${escapeDonorHtml(i.unit || 'pcs')}</td>
     </tr>
   `).join('');
 
-  // Full Supply Table (Numerical Only)
-  const fullTbody = document.getElementById('publicFullInventoryTable');
-  fullTbody.innerHTML = appData.inventory.map(i => `
+  // Public Distribution Logs Table
+  document.getElementById('publicDistributionsTable').innerHTML = distributionsList.map(d => `
     <tr>
-      <td><strong>${i.item}</strong></td>
-      <td style="color:#64748B;">${i.category}</td>
-      <td><span class="badge-number-stock">${i.quantity}</span></td>
-      <td>${i.unit}</td>
-    </tr>
-  `).join('');
-
-  // Distribution Logs Table
-  const distTbody = document.getElementById('publicDistributionsTable');
-  distTbody.innerHTML = appData.distributions.map(d => `
-    <tr>
-      <td><strong style="color:var(--brand-navy);">${d.id}</strong></td>
-      <td>${d.item}</td>
-      <td><span class="badge-number-stock">${d.quantity} units</span></td>
-      <td>${d.beneficiary}</td>
-      <td>${d.date}</td>
+      <td><strong style="color:var(--brand-navy);">${escapeDonorHtml(d.distributionId)}</strong></td>
+      <td>${escapeDonorHtml(d.itemName)}</td>
+      <td><span class="badge-number-stock">${Number(d.quantity) || 0}</span></td>
+      <td>${escapeDonorHtml(d.beneficiary)}</td>
+      <td>${escapeDonorHtml(d.dispatchedAt)}</td>
     </tr>
   `).join('');
 }
 
-// 6. Track Reference Code Search
-function handleSearchReference() {
+// 5. Scrollable & Nextable Drive Banner Carousel
+let currentDriveSlide = 0;
+let totalDriveSlides = 1;
+let driveScrollBound = false;
+
+function renderDriveCarousel(driveObj) {
+  const track = document.getElementById('publicDriveCarouselTrack');
+  const dotsContainer = document.getElementById('publicDriveCarouselDots');
+  const prevBtn = document.getElementById('publicDrivePrevBtn');
+  const nextBtn = document.getElementById('publicDriveNextBtn');
+  if (!track || !dotsContainer) return;
+
+  const images = Array.isArray(driveObj.images) && driveObj.images.length > 0
+    ? driveObj.images
+    : [driveObj.image || 'bg_homepage.png'];
+
+  totalDriveSlides = images.length;
+  currentDriveSlide = 0;
+
+  track.innerHTML = images.map((src, idx) => `
+    <div class="campaign-banner-slide">
+      <img
+        src="${escapeDonorHtml(src)}"
+        alt="${escapeDonorHtml(driveObj.title)} — Photo ${idx + 1}"
+        onerror="if (!this.dataset.fb) { this.dataset.fb='1'; this.src='bg_homepage.png'; }"
+      />
+    </div>
+  `).join('');
+
+  if (totalDriveSlides > 1) {
+    dotsContainer.classList.remove('hidden');
+    dotsContainer.innerHTML = images.map((_, idx) => `
+      <button
+        type="button"
+        class="campaign-banner-dot ${idx === 0 ? 'active' : ''}"
+        aria-label="Go to slide ${idx + 1}"
+        onclick="goToDriveSlide(${idx})"
+      ></button>
+    `).join('');
+    prevBtn.classList.remove('hidden');
+    nextBtn.classList.remove('hidden');
+  } else {
+    dotsContainer.innerHTML = '';
+    dotsContainer.classList.add('hidden');
+    prevBtn.classList.add('hidden');
+    nextBtn.classList.add('hidden');
+  }
+
+  track.scrollTo({ left: 0, behavior: 'auto' });
+
+  if (!driveScrollBound) {
+    driveScrollBound = true;
+    let tick = null;
+    track.addEventListener('scroll', () => {
+      clearTimeout(tick);
+      tick = setTimeout(() => {
+        const slideWidth = track.clientWidth || 1;
+        updateDriveCarouselDots(Math.round(track.scrollLeft / slideWidth));
+      }, 60);
+    }, { passive: true });
+  }
+}
+
+function updateDriveCarouselDots(index) {
+  currentDriveSlide = Math.max(0, Math.min(index, totalDriveSlides - 1));
+  document.querySelectorAll('#publicDriveCarouselDots .campaign-banner-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentDriveSlide);
+  });
+}
+
+function goToDriveSlide(index) {
+  const track = document.getElementById('publicDriveCarouselTrack');
+  if (!track || totalDriveSlides <= 1) return;
+  const wrapped = (index + totalDriveSlides) % totalDriveSlides;
+  currentDriveSlide = wrapped;
+  track.scrollTo({ left: wrapped * track.clientWidth, behavior: 'smooth' });
+  updateDriveCarouselDots(wrapped);
+}
+
+function stepDriveCarousel(delta) {
+  goToDriveSlide(currentDriveSlide + delta);
+}
+
+// 6. Track Donation Status by Reference Code
+async function handleSearchReference() {
   const code = document.getElementById('donorTrackInput').value.trim().toUpperCase();
   const resultBox = document.getElementById('donorTrackResultBox');
 
@@ -108,39 +220,58 @@ function handleSearchReference() {
     return;
   }
 
-  const match = appData.donations.find(d => d.id.toUpperCase() === code);
-  if (match) {
-    const badgeCls = match.status === 'To Receive' ? 'badge-to-receive' : 'badge-received';
-    resultBox.innerHTML = `
-      <div class="donor-card" style="border-left:4px solid var(--brand-blue); margin-top:18px;">
-        <div class="donor-card-body">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h3 style="font-size:18px; color:var(--brand-navy);">${match.id}</h3>
-            <span class="badge-pill ${badgeCls}">● ${match.status}</span>
-          </div>
-          <p style="font-size:13.5px; margin-bottom:6px;"><strong>Supply Item:</strong> ${match.quantity} ${match.unit} of ${match.item}</p>
-          <p style="font-size:12.5px; color:#64748B; margin-bottom:8px;">Recorded Date: ${match.date}</p>
-          <p style="font-size:12px; color:#475569; line-height:1.6;">
-            ${match.status === 'To Receive' 
-              ? 'This pledge is awaiting physical arrival at the storage hub. SafeStay admins will verify and add it to live inventory upon intake.' 
-              : 'This item has been officially verified, received into live warehouse inventory, and allocated for student boarder relief.'}
-          </p>
-        </div>
-      </div>
-    `;
-  } else {
+  appData = await fetchAppDataAsync();
+  const match = appData.donations.find(d => String(d.referenceCode || '').toUpperCase() === code);
+
+  if (!match) {
     resultBox.innerHTML = `
       <div class="donor-card" style="border-left:4px solid #C53B3B; margin-top:18px;">
         <div class="donor-card-body">
           <strong style="color:#C53B3B; font-size:14px; display:block; margin-bottom:4px;">Reference Code Not Found</strong>
-          <p style="font-size:12.5px; color:#64748B;">No record found matching <strong>${code}</strong>. Please double-check your receipt code.</p>
+          <p style="font-size:12.5px; color:#64748B;">No record found matching <strong>${escapeDonorHtml(code)}</strong>. Please double-check your receipt code.</p>
         </div>
       </div>
     `;
+    return;
   }
+
+  const statusLower = String(match.status || '').toLowerCase();
+  const badgeCls =
+    statusLower === 'to receive'
+      ? 'badge-to-receive'
+      : statusLower === 'distributed'
+        ? 'badge-distributed'
+        : 'badge-received';
+
+  const detailsLine = match.type === 'cash'
+    ? `₱${Number(match.amount || 0).toLocaleString()} via ${escapeDonorHtml(match.hub || 'QR Transfer')}`
+    : `${Number(match.quantity) || 0} ${escapeDonorHtml(match.unit || 'pcs')} of ${escapeDonorHtml(match.itemName)}`;
+
+  const statusNote =
+    statusLower === 'to receive'
+      ? (match.type === 'cash'
+          ? 'This cash transfer is logged and awaiting verification by MISSC administrators.'
+          : 'This pledge is awaiting physical arrival at the MISSC drop-off hub.')
+      : statusLower === 'distributed'
+        ? 'This contribution has been received and distributed to student boarders.'
+        : 'This contribution has been officially verified and received by MISSC.';
+
+  resultBox.innerHTML = `
+    <div class="donor-card" style="border-left:4px solid var(--brand-blue); margin-top:18px;">
+      <div class="donor-card-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+          <h3 style="font-size:18px; color:var(--brand-navy);">${escapeDonorHtml(match.referenceCode)}</h3>
+          <span class="badge-pill ${badgeCls}">● ${escapeDonorHtml(match.status)}</span>
+        </div>
+        <p style="font-size:13.5px; margin-bottom:6px;"><strong>Contribution:</strong> ${detailsLine}</p>
+        <p style="font-size:12.5px; color:#64748B; margin-bottom:8px;"><strong>Type:</strong> ${match.type === 'cash' ? 'Cash Donation' : 'Goods Donation'} · <strong>Date:</strong> ${escapeDonorHtml(match.date)}</p>
+        <p style="font-size:12.5px; color:#475569; line-height:1.6;">${statusNote}</p>
+      </div>
+    </div>
+  `;
 }
 
-// 7. Modal Handlers
+// 7. Modals & Donation Submission (Goods + Cash)
 function openChoiceModal() {
   document.getElementById('donorChoiceModal').classList.remove('hidden');
 }
@@ -159,61 +290,134 @@ function closeModals() {
   document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
 }
 
-// 8. Goods Pledge Submission -> Status: "To Receive" (Inventory UNTOUCHED)
-function handleGoodsPledgeSubmit(e) {
-  e.preventDefault();
+function inferPackagingUnit(itemName) {
+  const rules = [
+    { match: /\bcanned\s+goods?\b/i, unit: 'cans' },
+    { match: /\bhygiene\s+kits?\b/i, unit: 'kits' },
+    { match: /\brice/i, unit: 'packs' },
+    { match: /\bnoodles?\b/i, unit: 'packs' },
+    { match: /\bschool\s+supplies?\b/i, unit: 'sets' }
+  ];
+  const hit = rules.find(r => r.match.test(itemName));
+  return hit ? hit.unit : 'pcs';
+}
 
-  const donorName = document.getElementById('donorNameInput').value.trim() || 'Anonymous Donor';
-  const item = document.getElementById('donorItemInput').value.trim();
-  const qty = parseInt(document.getElementById('donorQuantityInput').value, 10);
-  const unit = document.getElementById('donorUnitInput').value.trim() || 'units';
-  const hub = document.getElementById('donorDropOffSelect').value;
-  const notes = document.getElementById('donorNotesInput').value.trim();
-
-  if (!item || isNaN(qty) || qty <= 0) return;
-
-  // Generate next ST-XXXX reference code
+function generateNextReferenceCode() {
   const nextNum = appData.donations.reduce((max, d) => {
-    const m = d.id.match(/\d+/);
+    const m = String(d.referenceCode || '').match(/\d+/);
     return m ? Math.max(max, parseInt(m[0], 10)) : max;
   }, 1048) + 1;
+  return `ST-${nextNum}`;
+}
 
-  const newId = `ST-${nextNum}`;
-  const today = new Date().toISOString().slice(0, 10);
+function showReceiptConfirmation(refCode, summaryHtml) {
+  document.getElementById('generatedReceiptCodeBox').textContent = refCode;
+  document.getElementById('generatedReceiptSummaryText').innerHTML = summaryHtml;
+  document.getElementById('donorReceiptModal').classList.remove('hidden');
+}
 
-  // Create pledge with status: "To Receive"
+async function handleGoodsPledgeSubmit(e) {
+  e.preventDefault();
+  const donorName = document.getElementById('donorNameInput').value.trim() || 'Anonymous Donor';
+  const itemName = document.getElementById('donorItemInput').value.trim();
+  const category = document.getElementById('donorCategoryInput').value.trim();
+  const qty = parseInt(document.getElementById('donorQuantityInput').value, 10);
+  const unit = inferPackagingUnit(itemName);
+  const hub = document.getElementById('donorDropOffSelect').value.trim();
+  const dropOffDate = document.getElementById('donorDropOffDateInput').value;
+  const notes = document.getElementById('donorNotesInput').value.trim();
+
+  if (!itemName || !category || !hub || !dropOffDate || isNaN(qty) || qty <= 0) return;
+
+  appData = await fetchAppDataAsync();
+  const refCode = generateNextReferenceCode();
+  const matchedInv = appData.inventory.find(i => i.name.toLowerCase() === itemName.toLowerCase());
+
   const newDonation = {
-    id: newId,
-    donor: donorName,
-    item: item,
+    referenceCode: refCode,
+    donorName,
+    type: 'goods',
+    itemId: matchedInv ? matchedInv.itemId : null,
+    itemName,
+    category,
     quantity: qty,
-    unit: unit,
+    amount: 0,
+    unit,
     status: 'To Receive',
-    date: today,
-    hub: hub,
-    notes: notes
+    date: new Date().toISOString().slice(0, 10),
+    hub,
+    dropOffDate,
+    notes
   };
 
   appData.donations.unshift(newDonation);
   saveAppData(appData);
+  await insertDonationAsync(newDonation);
 
-  // Reset form & display confirmation modal
   document.getElementById('donorGoodsForm').reset();
   closeModals();
-
-  document.getElementById('generatedReceiptCodeBox').textContent = newId;
-  document.getElementById('generatedReceiptSummaryText').innerHTML = `
-    Donor: <strong>${donorName}</strong><br />
-    Pledged: <strong>${qty} ${unit} of ${item}</strong><br />
-    Target Hub: <strong>${hub}</strong><br />
-    Status: <span class="badge-pill badge-to-receive">● To Receive</span>
-  `;
-  document.getElementById('donorReceiptModal').classList.remove('hidden');
-
-  renderDonorTables();
+  showReceiptConfirmation(
+    refCode,
+    `Donor: <strong>${escapeDonorHtml(donorName)}</strong><br />
+     Donation: <strong>${qty} ${escapeDonorHtml(unit)} of ${escapeDonorHtml(itemName)}</strong><br />
+     Drop-off location: <strong>${escapeDonorHtml(hub)}</strong>`
+  );
+  renderDonorPortal();
 }
 
-// 9. QR Code Zoom Lightbox
+async function handleMoneyDonationSubmit(e) {
+  e.preventDefault();
+  const donorName = document.getElementById('moneyDonorNameInput').value.trim() || 'Anonymous Donor';
+  const channel = document.getElementById('moneyChannelSelect').value;
+  const amount = parseFloat(document.getElementById('moneyAmountInput').value);
+  const notes = document.getElementById('moneyNotesInput').value.trim();
+
+  if (isNaN(amount) || amount <= 0) return;
+
+  appData = await fetchAppDataAsync();
+  const refCode = generateNextReferenceCode();
+
+  const newDonation = {
+    referenceCode: refCode,
+    donorName,
+    type: 'cash',
+    itemId: null,
+    itemName: `Cash Donation (${channel})`,
+    category: 'Monetary',
+    quantity: 1,
+    amount,
+    unit: 'PHP',
+    status: 'To Receive',
+    date: new Date().toISOString().slice(0, 10),
+    hub: channel,
+    dropOffDate: '',
+    notes
+  };
+
+  appData.donations.unshift(newDonation);
+  saveAppData(appData);
+  await insertDonationAsync(newDonation);
+
+  document.getElementById('donorMoneyForm').reset();
+  closeModals();
+  showReceiptConfirmation(
+    refCode,
+    `Donor: <strong>${escapeDonorHtml(donorName)}</strong><br />
+     Cash Amount: <strong>₱${amount.toLocaleString()}</strong> via <strong>${escapeDonorHtml(channel)}</strong><br />
+     Status: <strong>To Receive (Pending Admin Verification)</strong>`
+  );
+  renderDonorPortal();
+}
+
+function trackGeneratedReceipt() {
+  const code = document.getElementById('generatedReceiptCodeBox').textContent.trim();
+  closeModals();
+  switchDonorTab('track');
+  document.getElementById('donorTrackInput').value = code;
+  handleSearchReference();
+}
+
+// 8. QR Code Zoom Lightbox
 function zoomQRCode(service, accNumber, accName) {
   const zoomContainer = document.getElementById('qrZoomSvgContainer');
   const isGCash = service === 'GCash';
@@ -264,7 +468,34 @@ function closeQRZoom() {
   document.getElementById('donorQRZoomModal').classList.add('hidden');
 }
 
-// Initialize tables on load
+// 9. Initialization & Keyboard / Backdrop Listeners
 document.addEventListener('DOMContentLoaded', () => {
-  renderDonorTables();
+  renderDonorPortal();
+
+  const trackInput = document.getElementById('donorTrackInput');
+  if (trackInput) {
+    trackInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSearchReference();
+      }
+    });
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) {
+        if (overlay.id === 'donorQRZoomModal') closeQRZoom();
+        else closeModals();
+      }
+    });
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      const qrZoom = document.getElementById('donorQRZoomModal');
+      if (qrZoom && !qrZoom.classList.contains('hidden')) closeQRZoom();
+      else closeModals();
+    }
+  });
 });

@@ -1,19 +1,25 @@
 /* ==========================================================================
-   css/donor.css : DONOR TRANSPARENCY PORTAL (donor.html) STYLES
+   css/donor.css : DONOR TRANSPARENCY PORTAL (index.html) STYLES
    ========================================================================== */
-/* Page canvas: light background with navy text (was the old <body> style) */
 .view-donor {
   background-color: #ffffff;
   color: var(--text-main);
   font-family: "Poppins", sans-serif;
+  font-weight: 400;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   line-height: 1.5;
 }
 
+/* Prevent view overlap when toggling hidden */
+.donor-welcome-screen.hidden,
+.donor-workspace.hidden {
+  display: none !important;
+}
+
 /* =========================================================================
-   TOP NAVIGATION BAR
+   TOP NAVIGATION BAR (WELCOME SCREEN DEFAULT)
    ========================================================================= */
 .donor-topbar {
   height: 84px;
@@ -28,6 +34,7 @@
   z-index: 100;
   box-shadow: none;
 }
+
 .donor-brand-link {
   display: flex;
   align-items: center;
@@ -36,39 +43,72 @@
   color: #1e2659;
   cursor: pointer;
 }
+
 .donor-brand-logo {
   width: 42px;
   height: 46px;
   object-fit: contain;
 }
+
 .donor-brand-text-stack {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 1.05;
+  line-height: 1.08;
 }
+
 .donor-brand-title {
   font-size: 22px;
   font-weight: 800;
   color: #1e2659;
   letter-spacing: -0.02em;
 }
+
 .donor-brand-title span {
-  color: #0d74b8;
+  color: #1275b3;
   font-weight: 800;
 }
+
 .donor-brand-subtitle {
   font-size: 10.5px;
-  font-weight: 500;
-  color: #1e2659;
+  font-weight: 400;
+  color: #475569;
   letter-spacing: 0.01em;
   margin-top: 2px;
 }
+
 .donor-topbar-actions {
   display: flex;
   align-items: center;
   gap: 14px;
 }
+
+/* Top Contact Bar */
+.donor-topbar-contacts {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  font-size: 12px;
+  color: #475569;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.donor-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+  text-decoration: none;
+}
+
+.donor-contact-item svg {
+  width: 15px;
+  height: 15px;
+  color: #1275b3;
+  flex-shrink: 0;
+}
+
 /* =========================================================================
    VIEW 1: DONOR WELCOME SCREEN (2-COLUMN SPLIT LAYOUT)
    ========================================================================= */
@@ -172,10 +212,8 @@
   border-radius: 12px !important;
   border: none !important;
   cursor: pointer;
-  box-shadow: none !important;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
+  box-shadow: 0 4px 14px rgba(13, 116, 184, 0.24) !important;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
 .btn-donor-continue:hover {
@@ -201,32 +239,92 @@
 
 /* ==========================================================================
    VIEW 2: PUBLIC TRANSPARENCY WORKSPACE
+   Unified font, format, and layout with Admin Workspace (css/admin.css)
    ========================================================================== */
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) {
+  background: var(--surface-page, #f4f8fc);
+  color: var(--text-main, #1e2659);
+}
+
+/* Workspace Topbar — identical 74px height & 246px left brand column as Admin */
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-topbar {
+  height: var(--topbar-height, 74px);
+  min-height: var(--topbar-height, 74px);
+  padding: 0 clamp(20px, 3vw, 40px) 0 0;
+  background: #ffffff;
+  border-bottom: 1.5px solid var(--surface-border, #dce6f2);
+  box-shadow: 0 2px 10px rgba(18, 36, 100, 0.04);
+}
+
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-brand-link {
+  flex: 0 0 var(--sidebar-width, 246px);
+  width: var(--sidebar-width, 246px);
+  height: 100%;
+  padding: 0 22px;
+  margin-left: 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-right: 1.5px solid var(--surface-border, #dce6f2);
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-brand-logo {
+  width: 36px;
+  height: 40px;
+}
+
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e2659;
+}
+
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-brand-subtitle {
+  font-size: 10px;
+  font-weight: 400;
+  color: #475569;
+}
+
+body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-topbar-actions {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  padding-left: 16px;
+}
+
 .donor-workspace {
   flex: 1;
   display: grid;
-  grid-template-columns: 250px 1fr;
-  min-height: calc(100vh - 84px);
-  background: #f5f8fc;
-  border-top: 1.5px solid #cbd5e1;
+  grid-template-columns: var(--sidebar-width, 246px) minmax(0, 1fr);
+  min-height: calc(100vh - var(--topbar-height, 74px));
+  background: var(--surface-page, #f4f8fc);
+  border-top: none;
 }
 
+/* Sidebar — identical 246px width, padding, typography, active state, Exit btn as Admin */
 .donor-sidebar {
+  position: sticky;
+  top: var(--topbar-height, 74px);
+  align-self: start;
+  height: calc(100vh - var(--topbar-height, 74px));
+  min-height: 0;
+  box-sizing: border-box;
   background: #ffffff;
-  border-right: 1.5px solid #cbd5e1;
-  padding: 24px 16px;
+  border-right: 1.5px solid var(--surface-border, #dce6f2);
+  box-shadow: 2px 0 10px rgba(18, 36, 100, 0.03);
+  padding: 24px 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+  z-index: 10;
 }
 
 .donor-sidebar-label {
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  color: #7c7270;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a94a6;
   padding: 4px 12px 10px;
 }
 
@@ -234,78 +332,94 @@
 .donor-nav-tab-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   width: 100%;
-  border: 1px solid transparent;
+  border: 0;
   background: transparent;
-  padding: 9px 14px;
-  border-radius: 8px;
-  color: #1e2659;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #334155;
+  font-family: "Poppins", sans-serif;
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 1.3;
   cursor: pointer;
   text-align: left;
-  transition: all 0.18s ease;
+  transition: background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .donor-nav-tab-btn svg {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  color: #475569;
+  color: #64748b;
 }
 
 .donor-nav-tab-btn:hover {
   background: #f1f6fb;
-  color: #0d74b8;
+  color: #0d6ba8;
 }
 
 .donor-nav-tab-btn.active {
-  background: #f0f6fc;
-  border-color: #dbeafe;
-  box-shadow: 0 2px 5px rgba(18, 36, 100, 0.12);
-  color: #1e2659;
-  font-weight: 800;
+  background: #eaf3fa;
+  color: var(--text-main, #1e2659);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(18, 36, 100, 0.08);
+}
+
+.donor-nav-tab-btn.active svg {
+  color: #0d6ba8;
 }
 
 .donor-sidebar-exit-btn {
+  flex: 0 0 auto;
   margin-top: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 10px;
   width: 100%;
-  padding: 16px 20px;
+  padding: 12px 16px;
   background: #f3f4f6;
-  border: none;
+  border: 0;
   border-radius: 10px;
-  color: #111827;
-  font-size: 14px;
-  font-weight: 700;
+  color: #1e293b;
+  font-family: "Poppins", sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s ease;
+  transition: background 0.16s ease;
+}
+
+.donor-sidebar-exit-btn svg {
+  width: 19px;
+  height: 19px;
+  color: #334155;
+  flex-shrink: 0;
 }
 
 .donor-sidebar-exit-btn:hover {
   background: #e5e7eb;
 }
 
+/* Main Content Canvas — identical max-width & padding as Admin */
 .donor-main-container {
-  padding: 28px clamp(24px, 4vw, 48px) 32px;
-  max-width: 1180px;
-  margin: 0 auto;
+  max-width: 1200px;
   width: 100%;
+  margin: 0 auto;
+  padding: 30px clamp(24px, 3.5vw, 44px) 28px;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - var(--topbar-height, 74px));
   box-sizing: border-box;
 }
 
 .donor-page-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
-  color: #0d74b8;
-  margin-bottom: 2px;
   display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #1275b3;
+  margin-bottom: 3px;
 }
 
 .donor-page-heading {
@@ -318,104 +432,167 @@
 }
 
 .donor-page-heading h1 {
-  font-size: clamp(28px, 3vw, 38px);
-  font-weight: 800;
-  color: #1b285e;
+  font-size: clamp(24px, 2.5vw, 30px);
+  font-weight: 700;
+  color: var(--text-main, #1e2659);
   letter-spacing: -0.02em;
-  line-height: 1.15;
+  line-height: 1.18;
+  margin: 0;
 }
 
 .donor-page-heading p {
   display: none;
 }
-/*Top Contact Bar inside Workspace*/
-.donor-topbar-contacts {
-  display: flex;
-  align-items: center;
-  gap: clamp(18px, 3vw, 42px);
-  font-size: 12px;
-  color: #1e2659;
-  font-weight: 500;
-}
-.donor-contact-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #1e2659;
-  text-decoration: none;
-}
-.donor-contact-item svg {
-  width: 15px;
-  height: 15px;
-  color: #1e2659;
-}
-.donor-about-link {
-  color: #1e2659;
-  font-weight: 600;
-  text-decoration: underline;
-  margin-left: 12px;
-  cursor: pointer;
-}
 
-/* BUTTON: Donor_Choose_Donate_Btn */
+/* BUTTON: Donor_Choose_Donate_Btn (Unified Primary Button) */
 .btn-donor-main-action {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 9px;
   background: #0d6ba8;
   color: #ffffff;
   border: 0;
-  padding: 10px 22px;
+  padding: 10px 20px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 13.5px;
   cursor: pointer;
-  box-shadow: 0 3px 10px rgba(13, 107, 168, 0.25);
-  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(13, 107, 168, 0.22);
+  transition: background-color 0.18s ease, transform 0.16s ease, box-shadow 0.18s ease;
 }
+
 .btn-donor-main-action svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
+
 .btn-donor-main-action:hover {
   background: #095282;
   transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(13, 107, 168, 0.28);
 }
 
 /* Updatable Community Relief Drive Card */
 .active-campaign-banner-card {
   position: relative;
   background: #08112c;
-  border: none;
-  border-radius: 14px;
+  border: 1.5px solid var(--surface-card-border, #cfe0f0);
+  border-radius: var(--card-radius, 14px);
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(18, 36, 100, 0.14);
-  margin-bottom: 24px;
+  box-shadow: 0 6px 18px rgba(18, 36, 100, 0.1);
+  margin-bottom: 26px;
 }
+
 .campaign-banner-img-wrap {
   width: 100%;
-  height: 310px;
+  height: 300px;
   position: relative;
-  background: #1e293b;
+  background: #122464;
+  overflow: hidden;
 }
-.campaign-banner-img-wrap img {
+
+.campaign-banner-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.campaign-banner-track::-webkit-scrollbar {
+  display: none;
+}
+
+.campaign-banner-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+}
+
+.campaign-banner-img-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 26, 74, 0.62) 0%,
+    rgba(12, 26, 74, 0.16) 45%,
+    rgba(12, 26, 74, 0.48) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.campaign-banner-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
+
 .campaign-banner-title-overlay {
   position: absolute;
   top: 22px;
   left: 26px;
+  right: 26px;
   color: #ffffff;
-  font-size: clamp(22px, 2.4vw, 30px);
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
   margin: 0;
   z-index: 2;
+  pointer-events: none;
 }
+
+.campaign-banner-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(18, 36, 100, 0.58);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.16s ease;
+}
+
+.campaign-banner-nav-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.campaign-banner-nav-btn:hover {
+  background: rgba(13, 107, 168, 0.92);
+  border-color: #ffffff;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.campaign-banner-prev {
+  left: 14px;
+}
+
+.campaign-banner-next {
+  right: 14px;
+}
+
 .campaign-banner-dots {
   position: absolute;
   bottom: 14px;
@@ -424,180 +601,258 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  z-index: 2;
+  z-index: 3;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(12, 26, 74, 0.36);
+  backdrop-filter: blur(4px);
 }
+
 .campaign-banner-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: #ffffff;
-  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
+
+.campaign-banner-dot:hover {
+  background: rgba(255, 255, 255, 0.88);
+}
+
 .campaign-banner-dot.active {
-  background: #0d74b8;
-  opacity: 1;
+  background: #ffffff;
+  transform: scale(1.3);
 }
-.campaign-banner-overlay-badge,
+
+.campaign-banner-overlay-badge {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  z-index: 3;
+  background: rgba(18, 36, 100, 0.78);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .campaign-banner-info-body {
-  display: none;
+  background: #ffffff;
+  padding: 14px 22px;
+  border-top: 1px solid var(--surface-border, #dce6f2);
+}
+
+.campaign-banner-info-body p {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.55;
 }
 
 /* General Supply Overview Progress Bars */
 .supply-overview-section-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1e2659;
-  margin: 0 0 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
+  margin: 0 0 12px 0;
 }
+
 .supply-overview-card {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 18px 24px;
-  box-shadow: 0 2px 10px rgba(18, 36, 100, 0.04);
+  border: 1.5px solid var(--surface-card-border, #cfe0f0);
+  border-radius: var(--card-radius, 14px);
+  padding: 20px 24px;
+  box-shadow: 0 4px 14px rgba(18, 36, 100, 0.05);
 }
+
 .supply-progress-row {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
+
 .supply-progress-row:last-child {
   margin-bottom: 0;
 }
+
 .supply-progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
+
 .supply-progress-label {
-  font-size: 12px;
-  font-weight: 800;
-  color: #1e2659;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main, #1e2659);
 }
+
 .supply-progress-count {
-  font-size: 11px;
-  font-weight: 700;
-  color: #3b4b75;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0d6ba8;
 }
+
 .supply-progress-track {
   width: 100%;
   height: 8px;
-  background: #eef2f8;
+  background: #e6eff8;
   border-radius: 999px;
   overflow: hidden;
 }
+
 .supply-progress-fill {
   height: 100%;
-  background: #1d82db;
+  background: #1d74b3;
   border-radius: 999px;
 }
 
-/* Content Cards & Tables */
+/* Content Cards & Tables (Unified with Admin Workspace Cards & Blue Tables) */
 .donor-card {
   background: #ffffff;
-  border: 1.5px solid #6b9dc8;
-  border-radius: 10px;
+  border: 1.5px solid var(--surface-card-border, #cfe0f0);
+  border-radius: var(--card-radius, 14px);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(18, 36, 100, 0.06);
-  margin-bottom: 26px;
+  box-shadow: 0 4px 14px rgba(18, 36, 100, 0.05);
+  margin-bottom: 24px;
 }
+
 .donor-card-header {
-  padding: 18px 24px;
-  border-bottom: 1px solid #cbd5e1;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--surface-border, #dce6f2);
 }
+
 .donor-card-header h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1e2659;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
 }
+
 .donor-card-body {
-  padding: 28px 30px 36px;
+  padding: 26px 28px 30px;
 }
 
 /* Track Donation Reference Verification Card */
 .track-card-title {
   font-size: 17px;
-  font-weight: 800;
-  color: #1e2659;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
   margin: 0 0 4px 0;
 }
+
 .track-card-subtitle {
-  font-size: 11.5px;
-  font-style: italic;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
   color: #64748b;
-  margin: 0 0 28px 0;
+  margin: 0 0 22px 0;
 }
+
 .track-input-label {
   display: block;
-  font-size: 11px;
-  font-weight: 800;
-  color: #1e2659;
-  margin-bottom: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
+  margin-bottom: 7px;
 }
+
 .track-reference-input {
   width: 100%;
-  max-width: 780px;
-  background: #f0f0f0 !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 8px !important;
-  padding: 13px 18px !important;
-  font-size: 12.5px !important;
-  color: #1e2659 !important;
+  max-width: 560px;
+  background: #f8fafc !important;
+  border: 1.5px solid var(--surface-border, #dce6f2) !important;
+  border-radius: 10px !important;
+  padding: 11px 16px !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  color: var(--text-main, #1e2659) !important;
   margin-bottom: 16px !important;
   display: block;
   box-sizing: border-box;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
 }
+
+.track-reference-input:focus {
+  background: #ffffff !important;
+  border-color: #1d74b3 !important;
+  box-shadow: 0 0 0 3px rgba(29, 116, 179, 0.14) !important;
+  outline: none;
+}
+
 .track-bottom-helper {
   text-align: center;
-  margin-top: 56px;
+  margin-top: 32px;
 }
+
 .track-bottom-helper h4 {
-  font-size: 12px;
-  font-weight: 800;
-  color: #1e2659;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
   margin: 0 0 4px 0;
 }
+
 .track-bottom-helper p {
-  font-size: 11px;
-  color: #475569;
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748b;
   margin: 0;
 }
 
-/* High-Fidelity Blue Header Tables */
+/* Unified Blue-Header Tables (Identical to Admin .ledger-blue-table) */
 .donor-data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
 }
+
 .donor-data-table th {
   background: #0d6ba8;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 11px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 15px 18px;
+  padding: 14px 18px;
   border-bottom: none;
   text-align: center;
 }
+
 .donor-data-table td {
-  padding: 15px 18px;
-  border-bottom: 1px solid #93c5fd;
-  color: #111827;
-  font-weight: 700;
-  font-size: 11.5px;
-  text-transform: uppercase;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2ecf6;
+  color: #334155;
+  font-weight: 400;
+  font-size: 13px;
+  text-transform: none;
   text-align: center;
 }
+
+.donor-data-table td strong {
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
+}
+
 .donor-data-table tbody tr:last-child td {
   border-bottom: none;
 }
+
 .donor-data-table tbody tr:hover {
   background: #f8fbfe;
 }
+
 .badge-number-stock {
   background: transparent;
-  color: #111827;
-  font-weight: 700;
+  color: var(--text-main, #1e2659);
+  font-weight: 600;
   padding: 0;
   border-radius: 0;
 }
@@ -607,30 +862,35 @@
   background: #0d6ba8;
   color: #ffffff;
   border: 0;
-  padding: 9px 26px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s ease;
-  display: inline-block;
+  box-shadow: 0 3px 10px rgba(13, 107, 168, 0.22);
+  transition: background-color 0.18s ease, transform 0.16s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .btn-search-reference:hover {
   background: #095282;
+  transform: translateY(-1px);
 }
 
 .donor-workspace-footer {
   margin-top: auto;
-  padding-top: 28px;
+  padding-top: 24px;
   text-align: center;
-  font-size: 11px;
+  font-size: 11.5px;
+  font-weight: 400;
   color: #8b95a5;
 }
 
 /* ==========================================================================
    MODAL DIALOGS
    ========================================================================== */
-/* BUTTON: Donor_Modal_Close_Btn */
 .modal-close-icon-btn {
   background: #f1f5f9;
   border: 0;
@@ -642,41 +902,46 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.15s ease;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
+
 .modal-close-icon-btn:hover {
   background: #e2e8f0;
   color: var(--brand-navy);
 }
+
 /* Choice Modal: Donate Items vs Donate Money */
 .choice-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-/* BUTTONS: Donor_Select_Items_Btn, Donor_Select_Money_Btn */
+
 .choice-selection-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 18px;
-  border: 2px solid var(--surface-border);
+  padding: 26px 18px;
+  border: 1.5px solid var(--surface-card-border, #cfe0f0);
   background: #f8fafd;
-  border-radius: 16px;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: center;
 }
+
 .choice-selection-btn:hover {
   border-color: var(--brand-blue);
   background: #eaf3fa;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(29, 116, 179, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(29, 116, 179, 0.14);
 }
+
 .choice-icon-wrap {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
   background: var(--brand-blue);
   color: var(--brand-white);
@@ -685,17 +950,21 @@
   font-size: 24px;
   margin-bottom: 12px;
 }
+
 .choice-selection-btn strong {
   font-size: 15px;
-  color: var(--brand-navy);
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
   display: block;
   margin-bottom: 4px;
 }
+
 .choice-selection-btn span {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text-muted);
-  font-weight: 300;
+  font-weight: 400;
 }
+
 /* QR Code Lightbox & Zoom Area */
 .qr-cards-row {
   display: grid;
@@ -703,19 +972,30 @@
   gap: 16px;
   margin-bottom: 18px;
 }
+
 .qr-box {
-  border: 1.5px solid var(--surface-border);
+  border: 1.5px solid var(--surface-card-border, #cfe0f0);
   border-radius: 14px;
   padding: 16px;
   text-align: center;
   background: #f8fafd;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
+
+.qr-box:hover {
+  border-color: var(--brand-blue);
+  box-shadow: 0 6px 16px rgba(29, 116, 179, 0.1);
+}
+
 .qr-box strong {
-  font-size: 13px;
-  color: var(--brand-navy);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
   display: block;
   margin-bottom: 10px;
 }
+
 .qr-svg-holder {
   width: 140px;
   height: 140px;
@@ -727,120 +1007,98 @@
   border: 1px solid #cbd5e1;
   transition: transform 0.2s ease;
 }
-.qr-svg-holder:hover {
-  transform: scale(1.05);
+
+.qr-box:hover .qr-svg-holder {
+  transform: scale(1.04);
 }
+
 .qr-zoom-hint {
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--brand-blue);
   font-weight: 500;
 }
+
 /* Enlarged QR Modal */
 .qr-lightbox-content {
   text-align: center;
   padding: 10px;
 }
+
 .qr-lightbox-content svg {
   width: 240px;
   height: 240px;
   margin: 0 auto 16px;
 }
-@media (max-width: 820px) {
-  .donor-workspace {
-    grid-template-columns: 1fr;
-  }
-  .choice-grid {
-    grid-template-columns: 1fr;
-  }
-  .qr-cards-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Keep the sidebar and Exit control in the same viewport position on all donor tabs. */
-.donor-sidebar {
-  position: sticky;
-  top: 84px;
-  align-self: start;
-  height: calc(100vh - 84px);
-  min-height: 0;
-  box-sizing: border-box;
-}
-
-.donor-sidebar-exit-btn {
-  flex: 0 0 auto;
-  margin-top: auto;
-}
 
 /* ==========================================================================
    HIGH-FIDELITY DONATE GOODS + DONATION RECORDED MODALS
-   Scoped to these two dialogs only; the rest of the donor portal is unchanged.
+   Clean, comfortable client-ready typography & spacing
    ========================================================================== */
 #donorGoodsModal .donor-goods-modal-card,
 #donorReceiptModal .donor-receipt-modal-card {
-  width: min(480px, 48vw);
-  min-width: 320px;
-  max-width: 480px;
+  width: min(560px, calc(100vw - 32px));
+  max-width: 560px;
   max-height: calc(100vh - 32px);
   overflow-y: auto;
   box-sizing: border-box;
   background: #ffffff;
-  border: 1px solid #e0e7f0;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(18, 36, 100, 0.18);
+  border: 1px solid var(--surface-border, #dce6f2);
+  border-radius: 16px;
+  box-shadow: 0 22px 54px rgba(15, 29, 77, 0.28);
 }
 
 #donorGoodsModal .donor-goods-modal-header,
 #donorReceiptModal .donor-receipt-modal-header {
   position: relative;
   display: block;
-  padding: 15px 48px 10px 18px;
-  border-bottom: 1px solid #e5eaf1;
+  padding: 20px 56px 16px 24px;
+  border-bottom: 1px solid var(--surface-border, #dce6f2);
   background: #ffffff;
 }
 
 .donor-modal-heading-copy h3 {
-  margin: 0 0 2px;
-  color: #1e2659;
-  font-size: 17px;
-  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--text-main, #1e2659);
+  font-size: 18px;
+  font-weight: 700;
   line-height: 1.25;
 }
 
 .donor-modal-heading-copy p {
   margin: 0;
-  color: #68758a;
-  font-size: 9px;
-  line-height: 1.4;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 #donorGoodsModal .donor-modal-close-btn,
 #donorReceiptModal .donor-modal-close-btn {
   position: absolute;
-  top: 12px;
-  right: 13px;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  font-size: 17px;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 18px;
 }
 
 #donorGoodsModal .donor-goods-modal-body {
-  padding: 11px 18px 15px;
+  padding: 20px 24px 24px;
 }
 
 .donor-goods-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 12px;
-  row-gap: 8px;
+  column-gap: 16px;
+  row-gap: 14px;
 }
 
 .donor-form-group {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   margin: 0;
 }
 
@@ -851,52 +1109,56 @@
 .donor-form-group label {
   display: block;
   margin: 0;
-  color: #1e2659;
-  font-size: 9px;
-  font-weight: 700;
-  line-height: 1.25;
+  color: var(--text-main, #1e2659);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 #donorGoodsModal .donor-form-control {
   display: block;
   width: 100%;
   min-width: 0;
-  height: 28px;
+  height: 40px;
   box-sizing: border-box;
   margin: 0;
-  padding: 5px 9px;
-  border: 1px solid #dce4ee;
-  border-radius: 7px;
+  padding: 8px 13px;
+  border: 1.5px solid #dce6f2;
+  border-radius: 10px;
   outline: none;
-  background: #f0f0f0;
-  color: #1e2659;
+  background: #f8fafc;
+  color: var(--text-main, #1e2659);
   font-family: "Poppins", sans-serif;
-  font-size: 9px;
-  line-height: 1.3;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
   box-shadow: none;
+  transition: border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 #donorGoodsModal .donor-form-control:focus {
   border-color: #1d74b3;
   background: #ffffff;
-  box-shadow: 0 0 0 2px rgba(29, 116, 179, 0.12);
+  box-shadow: 0 0 0 3px rgba(29, 116, 179, 0.14);
 }
 
 #donorGoodsModal .donor-form-control::placeholder {
-  color: #858585;
+  color: #94a3b8;
   opacity: 1;
 }
 
 #donorGoodsModal .donor-form-helper {
   margin: 0;
-  color: #758096;
-  font-size: 8px;
-  line-height: 1.25;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
 }
 
 #donorGoodsModal .donor-form-textarea {
-  height: 34px;
-  min-height: 34px;
+  height: auto;
+  min-height: 64px;
+  padding: 10px 13px;
   overflow-y: hidden;
   resize: none;
 }
@@ -904,121 +1166,118 @@
 #donorGoodsModal select.donor-form-control {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: 25px;
+  padding-right: 32px;
   cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231e2659' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 9px center;
-  background-size: 11px;
+  background-position: right 12px center;
+  background-size: 13px;
 }
 
 #donorGoodsModal select.donor-form-control:invalid {
-  color: #858585;
+  color: #94a3b8;
 }
 
 .donor-form-group-notes {
-  grid-column: 1 / 2;
+  grid-column: 1 / -1;
 }
 
 .donor-form-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 9px;
-  margin-top: 1px;
+  gap: 10px;
+  margin-top: 6px;
 }
 
 .donor-secondary-action-btn {
   display: inline-flex;
-  min-width: 74px;
-  min-height: 29px;
+  min-width: 92px;
+  min-height: 38px;
   align-items: center;
   justify-content: center;
-  padding: 5px 14px;
+  padding: 8px 18px;
   border: 0;
-  border-radius: 7px;
-  background: #eef0f2;
-  color: #1f2937;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #334155;
   font-family: "Poppins", sans-serif;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s ease;
+  transition: background-color 0.16s ease;
 }
 
 .donor-secondary-action-btn:hover {
-  background: #e0e5eb;
+  background: #e2e8f0;
 }
 
 #donorGoodsModal .donor-form-submit-btn,
 #donorReceiptModal .donor-receipt-track-btn {
-  min-height: 29px;
+  min-height: 38px;
   justify-content: center;
-  padding: 5px 15px;
-  border-radius: 7px;
+  padding: 8px 22px;
+  border-radius: 10px;
   font-family: "Poppins", sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  box-shadow: none;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(13, 107, 168, 0.22);
 }
 
 /* Donation recorded / reference-code confirmation */
-#donorReceiptModal .donor-receipt-modal-header {
-  padding-top: 15px;
-  padding-bottom: 11px;
-}
-
 #donorReceiptModal .donor-receipt-modal-body {
-  min-height: 205px;
+  min-height: 210px;
   box-sizing: border-box;
-  padding: 17px 18px 15px;
+  padding: 26px 24px 22px;
   text-align: center;
 }
 
 .donor-receipt-success-icon {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 48px;
+  height: 48px;
   place-items: center;
-  margin: 0 auto 13px;
-  border: 2px solid #1684e8;
+  margin: 0 auto 14px;
+  border: 2.5px solid #16a34a;
+  background: #f0fdf4;
   border-radius: 50%;
-  color: #1684e8;
-  font-size: 22px;
-  font-weight: 500;
+  color: #16a34a;
+  font-size: 24px;
+  font-weight: 600;
   line-height: 1;
 }
 
 .donor-receipt-code-label {
-  margin: 0 0 3px;
-  color: #7a8492;
-  font-size: 8px;
+  margin: 0 0 6px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .donor-receipt-code {
   display: inline-block;
-  min-width: 130px;
+  min-width: 164px;
   box-sizing: border-box;
-  margin: 0 auto 7px;
-  padding: 5px 13px;
-  border: 1px solid #777777;
-  border-radius: 6px;
-  background: #f1f1f1;
-  color: #1e2659;
-  font-size: 19px;
-  font-weight: 800;
+  margin: 0 auto 14px;
+  padding: 8px 20px;
+  border: 1.5px solid #9cc0e0;
+  border-radius: 10px;
+  background: #f4f8fc;
+  color: var(--text-main, #1e2659);
+  font-size: 24px;
+  font-weight: 700;
   letter-spacing: 1px;
   line-height: 1.3;
 }
 
 .donor-receipt-summary {
-  color: #727b89;
-  font-size: 8px;
-  line-height: 1.65;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .donor-receipt-summary strong {
-  color: #566174;
+  color: var(--text-main, #1e2659);
   font-weight: 600;
 }
 
@@ -1027,58 +1286,97 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 12px 18px;
-  border-top: 1px solid #e8edf3;
-  background: #f0f2f5;
+  padding: 16px 24px;
+  border-top: 1px solid var(--surface-border, #dce6f2);
+  background: #f8fafc;
 }
 
 #donorReceiptModal .donor-receipt-track-btn {
-  background: #176eaa;
+  background: #0d6ba8;
 }
 
 #donorReceiptModal .donor-receipt-track-btn:hover {
   background: #095282;
 }
 
-@media (max-width: 600px) {
-  #donorGoodsModal .donor-goods-modal-card,
-  #donorReceiptModal .donor-receipt-modal-card {
-    width: calc(100vw - 28px);
-    min-width: 0;
-    max-width: 480px;
-  }
-
-  #donorGoodsModal .donor-goods-modal-body {
-    padding-right: 14px;
-    padding-left: 14px;
-  }
-
-  .donor-goods-form {
-    column-gap: 9px;
-    row-gap: 8px;
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1060px) {
+  .donor-contact-item {
+    display: none;
   }
 }
 
-@media (max-width: 380px) {
-  .donor-goods-form {
+@media (max-width: 820px) {
+  .donor-welcome-split-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 28px;
+  }
+
+  .donor-welcome-crest-wrap {
+    width: min(76vw, 320px) !important;
+  }
+
+  .donor-welcome-content-col {
+    align-items: center !important;
+    text-align: center !important;
+    justify-self: center;
+  }
+
+  .donor-welcome-heading,
+  .donor-welcome-motto {
+    text-align: center !important;
+  }
+
+  body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-brand-link {
+    width: auto;
+    flex: 0 0 auto;
+    border-right: none;
+    padding: 0 16px;
+  }
+
+  .donor-workspace {
     grid-template-columns: 1fr;
   }
 
-  .donor-form-group-notes {
-    grid-column: 1 / -1;
+  .donor-sidebar {
+    position: static;
+    height: auto;
+    box-shadow: none;
+    border-right: none;
+    border-bottom: 1.5px solid var(--surface-border, #dce6f2);
+  }
+
+  .choice-grid,
+  .qr-cards-row {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Center the SafeTrace brand in the navigation column only while the
-   donor workspace is active; the welcome screen remains unchanged. */
-body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-topbar .donor-brand-link {
-  flex: 0 0 250px;
-  width: 250px;
-  margin-left: calc(-1 * clamp(24px, 4vw, 56px));
-  justify-content: center;
+@media (max-width: 560px) {
+  .donor-goods-form {
+    grid-template-columns: 1fr;
+  }
 }
 
-body.view-donor:has(#donorTransparencyWorkspace:not(.hidden)) .donor-topbar .donor-topbar-actions {
-  flex: 1 1 auto;
-  justify-content: flex-end;
+/* Cash Donation Confirmation Form inside Donate Money Modal */
+.money-pledge-divider {
+  height: 1px;
+  background: #e2ecf6;
+  margin: 18px 0 16px;
+}
+
+.money-pledge-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main, #1e2659);
+  margin: 0 0 4px;
+}
+
+.money-pledge-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 14px;
 }
